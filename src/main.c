@@ -203,6 +203,7 @@ parse_arg_list(int argc, char **argv, char ***fuse_argv, int *fuse_argc)
         { "proxy-cacert", required_argument, NULL, 'L' },       /* 24 */
         { "refresh-timeout", required_argument, NULL, 'L' },    /* 25 */
         { "http-header", required_argument, NULL, 'L' },        /* 26 */
+        { "clear-cache", no_argument, NULL, 'L' },     /* 27 */
         { 0, 0, 0, 0 }
     };
     while ((c =
@@ -314,6 +315,9 @@ parse_arg_list(int argc, char **argv, char ***fuse_argv, int *fuse_argc)
                 CONFIG.http_headers =
                     curl_slist_append(CONFIG.http_headers, strdup(optarg));
                 break;
+            case 27:
+                CacheSystem_clear();
+                break;
             default:
                 fprintf(stderr, "see httpdirfs -h for usage\n");
                 return 1;
@@ -369,6 +373,7 @@ HTTPDirFS options:\n\
         --cache             Enable cache (default: off)\n\
         --cache-location    Set a custom cache location\n\
                             (default: \"${XDG_CACHE_HOME}/httpdirfs\")\n\
+        --clear-cache       Clear cache directory and exit\n\
         --cacert            Certificate authority for the server\n\
         --dl-seg-size       Set cache download segment size, in MB (default: 8)\n\
                             Note: this setting is ignored if previously\n\
